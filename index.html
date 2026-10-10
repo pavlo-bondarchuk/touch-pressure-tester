@@ -126,7 +126,12 @@ button{
   font:inherit;
   font-weight:650;
   cursor:pointer;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:9px;
 }
+button svg{width:18px;height:18px;flex:0 0 auto;stroke-width:2}
 button:active{transform:scale(.985)}
 .note{
   color:var(--muted);
@@ -181,8 +186,22 @@ button:active{transform:scale(.985)}
   </section>
 
   <section class="actions">
-    <button id="reset" type="button">Сбросить максимум</button>
-    <button id="fullscreen" type="button">На весь экран</button>
+    <button id="reset" type="button">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M3 12a9 9 0 1 0 3-6.7L3 8"/>
+        <path d="M3 3v5h5"/>
+      </svg>
+      <span>Сбросить максимум</span>
+    </button>
+    <button id="fullscreen" type="button">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M8 3H5a2 2 0 0 0-2 2v3"/>
+        <path d="M16 3h3a2 2 0 0 1 2 2v3"/>
+        <path d="M8 21H5a2 2 0 0 1-2-2v-3"/>
+        <path d="M16 21h3a2 2 0 0 0 2-2v-3"/>
+      </svg>
+      <span>На весь экран</span>
+    </button>
   </section>
 
   <div class="note">
