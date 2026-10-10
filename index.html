@@ -167,7 +167,7 @@ button:active{transform:scale(.985)}
       <strong id="maxValue">0%</strong>
     </div>
     <div class="card">
-      <span>Pressure</span>
+      <span>Pressure / Force Touch</span>
       <strong id="rawValue">0.000</strong>
     </div>
     <div class="card">
@@ -186,7 +186,7 @@ button:active{transform:scale(.985)}
   </section>
 
   <div class="note">
-    Если устройство не отдаёт настоящее давление, тест использует изменение площади контакта пальца как приблизительный показатель силы. Это не физическое измерение в ньютонах, а эвристика: чем сильнее палец расплющивается о стекло, тем больше становится пятно контакта.
+    На MacBook с Force Touch используется Apple WebKit Force API. На сенсорных устройствах приоритет отдаётся реальному pressure, а если его нет — изменению площади контакта пальца. Значение в процентах условное и не является измерением силы в ньютонах.
   </div>
 </main>
 
@@ -208,6 +208,8 @@ let maxPressure = 0
 let seenValues = new Set()
 let active = false
 let meaningfulPressure = false
+let forceTouchDetected = false
+let lastForceTouch = 0
 let baselineArea = 0
 let maxObservedArea = 0
 let areaSamples = []
@@ -230,9 +232,16 @@ function normalizeArea(area) {
   return clamp((ratio - 1) / 1.2)
 }
 
-function render(pressure, area, source) {
+function render(pressure, area, source, forceTouch = null) {
   pressure = clamp(pressure)
   area = Math.max(0, area || 0)
+
+  if (typeof forceTouch === 'number' && forceTouch > 0) {
+    forceTouchDetected = true
+    lastForceTouch = clamp(forceTouch)
+  } else if (forceTouch === 0) {
+    lastForceTouch = 0
+  }
 
   if (active && pressure > 0) {
     seenValues.add(pressure.toFixed(3))
@@ -247,7 +256,11 @@ function render(pressure, area, source) {
   }
 
   const areaStrength = normalizeArea(area)
-  const strength = meaningfulPressure ? pressure : areaStrength
+  const strength = forceTouchDetected && lastForceTouch > 0
+    ? lastForceTouch
+    : meaningfulPressure
+      ? pressure
+      : areaStrength
   const pct = Math.round(strength * 100)
   const areaChange = baselineArea > 0 && area > 0
     ? Math.max(0, ((area / baselineArea) - 1) * 100)
@@ -256,7 +269,7 @@ function render(pressure, area, source) {
   maxPressure = Math.max(maxPressure, strength)
 
   valueEl.textContent = pct
-  rawEl.textContent = pressure.toFixed(3)
+  rawEl.textContent = (forceTouchDetected && lastForceTouch > 0 ? lastForceTouch : pressure).toFixed(3)
   areaEl.textContent = area > 0 ? Math.round(area) + ' px²' : '—'
   areaDeltaEl.textContent = area > 0 ? Math.round(areaChange) + '%' : '—'
   maxEl.textContent = Math.round(maxPressure * 100) + '%'
@@ -264,7 +277,11 @@ function render(pressure, area, source) {
   pad.style.setProperty('--pressure-scale', String(.45 + strength * 1.8))
   pad.style.setProperty('--pressure-opacity', String(.25 + strength * .75))
 
-  if (meaningfulPressure) {
+  if (forceTouchDetected && lastForceTouch > 0) {
+    sourceEl.textContent = 'Mac Force Touch'
+    status.className = 'status ok'
+    statusText.textContent = 'Force Touch обнаружен'
+  } else if (meaningfulPressure) {
     sourceEl.textContent = 'Реальное давление'
     status.className = 'status ok'
     statusText.textContent = 'Изменяемое давление обнаружено'
@@ -286,6 +303,24 @@ function getPointerArea(e) {
   const width = Number(e.width) || 0
   const height = Number(e.height) || 0
   return width > 0 && height > 0 ? Math.PI * (width / 2) * (height / 2) : 0
+}
+
+function normalizeWebkitForce(e) {
+  const raw = Number(e.webkitForce)
+  if (!Number.isFinite(raw) || raw <= 0) return 0
+
+  const normal = Number(MouseEvent.WEBKIT_FORCE_AT_MOUSE_DOWN) || 1
+  const force = Number(MouseEvent.WEBKIT_FORCE_AT_FORCE_MOUSE_DOWN) || 2
+
+  if (force <= normal) return clamp(raw)
+  return clamp((raw - normal) / (force - normal))
+}
+
+function handleForceTouch(e) {
+  const normalized = normalizeWebkitForce(e)
+  active = normalized > 0
+  pad.classList.toggle('active', active)
+  render(getPointerPressure(e), getPointerArea(e), 'Mac Force Touch', normalized)
 }
 
 pad.addEventListener('pointerdown', e => {
@@ -316,6 +351,16 @@ function endPointer() {
 
 pad.addEventListener('pointerup', endPointer)
 pad.addEventListener('pointercancel', endPointer)
+
+pad.addEventListener('webkitmouseforcechanged', handleForceTouch)
+pad.addEventListener('webkitmouseforcedown', handleForceTouch)
+pad.addEventListener('webkitmouseforceup', e => {
+  forceTouchDetected = true
+  lastForceTouch = 0
+  active = false
+  pad.classList.remove('active')
+  render(0, 0, 'Отпущено', 0)
+})
 pad.addEventListener('lostpointercapture', () => {
   if (active) endPointer()
 })
@@ -383,8 +428,13 @@ fullscreen.addEventListener('click', async () => {
 function initialSupportCheck() {
   const pointerSupported = 'PointerEvent' in window
   const pressureField = pointerSupported && 'pressure' in PointerEvent.prototype
+  const forceTouchSupported = typeof MouseEvent !== 'undefined' &&
+    ('WEBKIT_FORCE_AT_MOUSE_DOWN' in MouseEvent || 'onwebkitmouseforcechanged' in window)
 
-  if (pressureField) {
+  if (forceTouchSupported) {
+    status.className = 'status'
+    statusText.textContent = 'Force Touch API доступен — нажмите сильнее'
+  } else if (pressureField) {
     status.className = 'status'
     statusText.textContent = 'API давления доступен — нажмите для проверки'
   } else if ('ontouchstart' in window) {
