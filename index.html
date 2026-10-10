@@ -18,136 +18,36 @@
 }
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{margin:0;min-height:100%;background:var(--bg);font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:var(--text)}
-body{
-  min-height:100dvh;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  padding:max(18px,env(safe-area-inset-top)) max(18px,env(safe-area-inset-right)) max(18px,env(safe-area-inset-bottom)) max(18px,env(safe-area-inset-left));
-  overscroll-behavior:none;
-}
+body{min-height:100dvh;display:flex;justify-content:center;align-items:center;padding:max(18px,env(safe-area-inset-top)) max(18px,env(safe-area-inset-right)) max(18px,env(safe-area-inset-bottom)) max(18px,env(safe-area-inset-left));overscroll-behavior:none}
 .app{width:min(720px,100%);display:grid;gap:16px}
 .header h1{font-size:clamp(26px,6vw,42px);line-height:1.05;margin:0 0 8px}
 .header p{margin:0;color:var(--muted);font-size:14px;line-height:1.5}
-.status{
-  display:flex;
-  align-items:center;
-  gap:8px;
-  width:max-content;
-  max-width:100%;
-  margin-top:12px;
-  padding:8px 11px;
-  border:1px solid var(--line);
-  border-radius:999px;
-  color:var(--muted);
-  font-size:12px;
-}
+.status{display:flex;align-items:center;gap:8px;width:max-content;max-width:100%;margin-top:12px;padding:8px 11px;border:1px solid var(--line);border-radius:999px;color:var(--muted);font-size:12px}
 .dot{width:8px;height:8px;border-radius:50%;background:#64748b;box-shadow:0 0 0 4px rgba(100,116,139,.12)}
 .status.ok .dot{background:#22c55e;box-shadow:0 0 0 4px rgba(34,197,94,.12)}
 .status.warn .dot{background:#f59e0b;box-shadow:0 0 0 4px rgba(245,158,11,.12)}
 .browser-note{display:none;align-items:flex-start;gap:10px;padding:12px 14px;border:1px solid rgba(245,158,11,.28);background:rgba(245,158,11,.07);border-radius:16px;color:#fbbf24;font-size:13px;line-height:1.45}
 .browser-note.show{display:flex}
 .browser-note svg{width:18px;height:18px;flex:0 0 auto;margin-top:1px}
-.pad{
-  position:relative;
-  min-height:min(62dvh,520px);
-  border-radius:28px;
-  border:1px solid var(--line);
-  overflow:hidden;
-  touch-action:none;
-  user-select:none;
-  -webkit-user-select:none;
-  background:
-    radial-gradient(circle at 50% 45%,rgba(124,58,237,.14),transparent 38%),
-    linear-gradient(145deg,#111827,#0b1020);
-  display:grid;
-  place-items:center;
-  cursor:crosshair;
-  isolation:isolate;
-}
-.pad::before{
-  content:"";
-  position:absolute;
-  width:36%;
-  aspect-ratio:1;
-  border-radius:50%;
-  background:radial-gradient(circle,rgba(34,211,238,.34),rgba(124,58,237,.12) 45%,transparent 72%);
-  transform:scale(var(--pressure-scale,.45));
-  opacity:var(--pressure-opacity,.30);
-  transition:transform .045s linear,opacity .045s linear;
-  filter:blur(1px);
-  z-index:-1;
-}
-.pad.active{
-  border-color:rgba(124,58,237,.65);
-  box-shadow:inset 0 0 70px rgba(124,58,237,.08);
-}
+.pad{position:relative;min-height:min(62dvh,520px);border-radius:28px;border:1px solid var(--line);overflow:hidden;touch-action:none;user-select:none;-webkit-user-select:none;background:radial-gradient(circle at 50% 45%,rgba(124,58,237,.14),transparent 38%),linear-gradient(145deg,#111827,#0b1020);display:grid;place-items:center;cursor:crosshair;isolation:isolate}
+.pad::before{content:"";position:absolute;width:36%;aspect-ratio:1;border-radius:50%;background:radial-gradient(circle,rgba(34,211,238,.34),rgba(124,58,237,.12) 45%,transparent 72%);transform:scale(var(--pressure-scale,.45));opacity:var(--pressure-opacity,.30);transition:transform .045s linear,opacity .045s linear;filter:blur(1px);z-index:-1}
+.pad.active{border-color:rgba(124,58,237,.65);box-shadow:inset 0 0 70px rgba(124,58,237,.08)}
 .readout{text-align:center;pointer-events:none;padding:30px}
-.value{
-  font-size:clamp(76px,21vw,150px);
-  font-weight:800;
-  letter-spacing:-.07em;
-  line-height:.82;
-  font-variant-numeric:tabular-nums;
-}
+.value{font-size:clamp(76px,21vw,150px);font-weight:800;letter-spacing:-.07em;line-height:.82;font-variant-numeric:tabular-nums}
 .unit{font-size:clamp(20px,5vw,34px);font-weight:700;color:var(--muted);margin-left:8px}
 .label{margin-top:20px;color:var(--muted);font-size:14px}
-.bar{
-  position:absolute;
-  left:22px;
-  right:22px;
-  bottom:22px;
-  height:9px;
-  border-radius:999px;
-  background:rgba(255,255,255,.08);
-  overflow:hidden;
-}
-.fill{
-  width:0%;
-  height:100%;
-  border-radius:inherit;
-  background:linear-gradient(90deg,var(--accent2),var(--accent));
-  transition:width .03s linear;
-}
+.bar{position:absolute;left:22px;right:22px;bottom:22px;height:9px;border-radius:999px;background:rgba(255,255,255,.08);overflow:hidden}
+.fill{width:0%;height:100%;border-radius:inherit;background:linear-gradient(90deg,var(--accent2),var(--accent));transition:width .03s linear}
 .stats{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.card{
-  border:1px solid var(--line);
-  background:var(--panel);
-  border-radius:18px;
-  padding:16px;
-}
+.card{border:1px solid var(--line);background:var(--panel);border-radius:18px;padding:16px}
 .card span{display:block;color:var(--muted);font-size:12px;margin-bottom:7px}
 .card strong{font-size:24px;font-variant-numeric:tabular-nums}
 .actions{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-button{
-  appearance:none;
-  border:1px solid var(--line);
-  border-radius:16px;
-  min-height:50px;
-  background:#141c2c;
-  color:var(--text);
-  font:inherit;
-  font-weight:650;
-  cursor:pointer;
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  gap:9px;
-}
+button{appearance:none;border:1px solid var(--line);border-radius:16px;min-height:50px;background:#141c2c;color:var(--text);font:inherit;font-weight:650;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:9px}
 button svg{width:18px;height:18px;flex:0 0 auto;stroke-width:2}
 button:active{transform:scale(.985)}
-.note{
-  color:var(--muted);
-  font-size:12px;
-  line-height:1.5;
-  border-top:1px solid var(--line);
-  padding-top:14px;
-}
-@media(max-width:480px){
-  body{align-items:stretch}
-  .app{align-content:start}
-  .pad{min-height:54dvh;border-radius:24px}
-}
+.note{color:var(--muted);font-size:12px;line-height:1.5;border-top:1px solid var(--line);padding-top:14px}
+@media(max-width:480px){body{align-items:stretch}.app{align-content:start}.pad{min-height:54dvh;border-radius:24px}}
 </style>
 </head>
 <body>
@@ -155,70 +55,34 @@ button:active{transform:scale(.985)}
   <header class="header">
     <h1>Тестер силы нажатия</h1>
     <p>Нажмите на область ниже и, не отпуская палец, меняйте силу нажатия.</p>
-    <div class="status" id="status">
-      <span class="dot"></span>
-      <span id="statusText">Проверяем поддержку датчика…</span>
-    </div>
+    <div class="status" id="status"><span class="dot"></span><span id="statusText">Проверяем поддержку датчика…</span></div>
   </header>
 
   <div class="browser-note" id="browserNote">
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-      <path d="M21.73 18 13 3a2 2 0 0 0-3.46 0L.8 18A2 2 0 0 0 2.54 21h17.92A2 2 0 0 0 22.2 18Z"/>
-      <path d="M12 9v4"/>
-      <path d="M12 17h.01"/>
-    </svg>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21.73 18 13 3a2 2 0 0 0-3.46 0L.8 18A2 2 0 0 0 2.54 21h17.92A2 2 0 0 0 22.2 18Z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>
     <span>Chrome на macOS не передаёт реальную силу Force Touch. Здесь обычное нажатие будет показано как условные 50%. Для настоящего измерения силы откройте страницу в Safari.</span>
   </div>
 
   <section class="pad" id="pad" aria-label="Зона тестирования силы нажатия">
-    <div class="readout">
-      <div><span class="value" id="value">0</span><span class="unit">%</span></div>
-      <div class="label" id="source">Коснитесь экрана</div>
-    </div>
+    <div class="readout"><div><span class="value" id="value">0</span><span class="unit">%</span></div><div class="label" id="source">Коснитесь экрана</div></div>
     <div class="bar"><div class="fill" id="fill"></div></div>
   </section>
 
   <section class="stats">
-    <div class="card">
-      <span>Максимум</span>
-      <strong id="maxValue">0%</strong>
-    </div>
-    <div class="card">
-      <span>Pressure / Force Touch</span>
-      <strong id="rawValue">0.000</strong>
-    </div>
-    <div class="card">
-      <span>Пятно пальца</span>
-      <strong id="areaValue">0 px²</strong>
-    </div>
-    <div class="card">
-      <span>Изменение пятна</span>
-      <strong id="areaDelta">0%</strong>
-    </div>
+    <div class="card"><span>Максимум</span><strong id="maxValue">0%</strong></div>
+    <div class="card"><span>Pressure / Force Touch</span><strong id="rawValue">0.000</strong></div>
+    <div class="card"><span>Пятно пальца</span><strong id="areaValue">0 px²</strong></div>
+    <div class="card"><span>Изменение пятна</span><strong id="areaDelta">0%</strong></div>
+    <div class="card"><span>Пальцев сейчас</span><strong id="fingerCount">0</strong></div>
+    <div class="card"><span>Максимум пальцев</span><strong id="maxFingerCount">0</strong></div>
   </section>
 
   <section class="actions">
-    <button id="reset" type="button">
-      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-        <path d="M3 12a9 9 0 1 0 3-6.7L3 8"/>
-        <path d="M3 3v5h5"/>
-      </svg>
-      <span>Сбросить максимум</span>
-    </button>
-    <button id="fullscreen" type="button">
-      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-        <path d="M8 3H5a2 2 0 0 0-2 2v3"/>
-        <path d="M16 3h3a2 2 0 0 1 2 2v3"/>
-        <path d="M8 21H5a2 2 0 0 1-2-2v-3"/>
-        <path d="M16 21h3a2 2 0 0 0 2-2v-3"/>
-      </svg>
-      <span>На весь экран</span>
-    </button>
+    <button id="reset" type="button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg><span>Сбросить максимум</span></button>
+    <button id="fullscreen" type="button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 3H5a2 2 0 0 0-2 2v3"/><path d="M16 3h3a2 2 0 0 1 2 2v3"/><path d="M8 21H5a2 2 0 0 1-2-2v-3"/><path d="M16 21h3a2 2 0 0 0 2-2v-3"/></svg><span>На весь экран</span></button>
   </section>
 
-  <div class="note">
-    На MacBook с Force Touch используется Apple WebKit Force API. На сенсорных устройствах приоритет отдаётся реальному pressure, а если его нет — изменению площади контакта пальца. Значение в процентах условное и не является измерением силы в ньютонах.
-  </div>
+  <div class="note">На MacBook с Force Touch используется Apple WebKit Force API. На сенсорных устройствах приоритет отдаётся реальному pressure, затем изменению площади контакта. Если устройство передаёт только факт касания, тест показывает условные 50%. Счётчик пальцев работает независимо от датчика силы. Значение в процентах не является измерением силы в ньютонах.</div>
 </main>
 
 <script>
@@ -228,6 +92,8 @@ const rawEl = document.getElementById('rawValue')
 const areaEl = document.getElementById('areaValue')
 const areaDeltaEl = document.getElementById('areaDelta')
 const maxEl = document.getElementById('maxValue')
+const fingerCountEl = document.getElementById('fingerCount')
+const maxFingerCountEl = document.getElementById('maxFingerCount')
 const fill = document.getElementById('fill')
 const sourceEl = document.getElementById('source')
 const status = document.getElementById('status')
@@ -251,21 +117,23 @@ let baselineArea = 0
 let maxObservedArea = 0
 let areaSamples = []
 let chromeFallbackActive = false
+let genericTouchFallbackActive = false
+let activeTouchPointers = new Set()
+let maxFingerCount = 0
 
-function clamp(v, min = 0, max = 1) {
-  return Math.min(max, Math.max(min, Number.isFinite(v) ? v : 0))
+function clamp(v, min = 0, max = 1) { return Math.min(max, Math.max(min, Number.isFinite(v) ? v : 0)) }
+
+function updateFingerCount(count = activeTouchPointers.size) {
+  const current = Math.max(0, count)
+  maxFingerCount = Math.max(maxFingerCount, current)
+  fingerCountEl.textContent = String(current)
+  maxFingerCountEl.textContent = String(maxFingerCount)
 }
 
 function normalizeArea(area) {
   if (!area || area <= 0) return 0
-
-  if (!baselineArea) {
-    baselineArea = area
-    maxObservedArea = area
-  }
-
+  if (!baselineArea) { baselineArea = area; maxObservedArea = area }
   maxObservedArea = Math.max(maxObservedArea, area)
-
   const ratio = area / Math.max(1, baselineArea)
   return clamp((ratio - 1) / 1.2)
 }
@@ -274,12 +142,8 @@ function render(pressure, area, source, forceTouch = null) {
   pressure = clamp(pressure)
   area = Math.max(0, area || 0)
 
-  if (typeof forceTouch === 'number' && forceTouch > 0) {
-    forceTouchDetected = true
-    lastForceTouch = clamp(forceTouch)
-  } else if (forceTouch === 0) {
-    lastForceTouch = 0
-  }
+  if (typeof forceTouch === 'number' && forceTouch > 0) { forceTouchDetected = true; lastForceTouch = clamp(forceTouch) }
+  else if (forceTouch === 0) lastForceTouch = 0
 
   if (active && pressure > 0) {
     seenValues.add(pressure.toFixed(3))
@@ -288,29 +152,18 @@ function render(pressure, area, source, forceTouch = null) {
 
   if (active && area > 0) {
     areaSamples.push(area)
-    if (areaSamples.length <= 3) {
-      baselineArea = Math.min(...areaSamples)
-    }
+    if (areaSamples.length <= 3) baselineArea = Math.min(...areaSamples)
   }
 
   const areaStrength = normalizeArea(area)
-  const fallbackStrength = chromeMacFallback && chromeFallbackActive ? 0.5 : 0
-  const strength = forceTouchDetected && lastForceTouch > 0
-    ? lastForceTouch
-    : meaningfulPressure
-      ? pressure
-      : areaStrength > 0
-        ? areaStrength
-        : fallbackStrength
+  const fallbackStrength = (chromeMacFallback && chromeFallbackActive) || genericTouchFallbackActive ? 0.5 : 0
+  const strength = forceTouchDetected && lastForceTouch > 0 ? lastForceTouch : meaningfulPressure ? pressure : areaStrength > 0 ? areaStrength : fallbackStrength
   const pct = Math.round(strength * 100)
-  const areaChange = baselineArea > 0 && area > 0
-    ? Math.max(0, ((area / baselineArea) - 1) * 100)
-    : 0
+  const areaChange = baselineArea > 0 && area > 0 ? Math.max(0, ((area / baselineArea) - 1) * 100) : 0
 
   maxPressure = Math.max(maxPressure, strength)
-
   valueEl.textContent = pct
-  rawEl.textContent = (forceTouchDetected && lastForceTouch > 0 ? lastForceTouch : meaningfulPressure ? pressure : fallbackStrength).toFixed(3)
+  rawEl.textContent = (forceTouchDetected && lastForceTouch > 0 ? lastForceTouch : pressure).toFixed(3)
   areaEl.textContent = area > 0 ? Math.round(area) + ' px²' : '—'
   areaDeltaEl.textContent = area > 0 ? Math.round(areaChange) + '%' : '—'
   maxEl.textContent = Math.round(maxPressure * 100) + '%'
@@ -319,44 +172,26 @@ function render(pressure, area, source, forceTouch = null) {
   pad.style.setProperty('--pressure-opacity', String(.25 + strength * .75))
 
   if (forceTouchDetected && lastForceTouch > 0) {
-    sourceEl.textContent = 'Mac Force Touch'
-    status.className = 'status ok'
-    statusText.textContent = 'Force Touch обнаружен'
+    sourceEl.textContent = 'Mac Force Touch'; status.className = 'status ok'; statusText.textContent = 'Force Touch обнаружен'
   } else if (meaningfulPressure) {
-    sourceEl.textContent = 'Реальное давление'
-    status.className = 'status ok'
-    statusText.textContent = 'Изменяемое давление обнаружено'
+    sourceEl.textContent = 'Реальное давление'; status.className = 'status ok'; statusText.textContent = 'Изменяемое давление обнаружено'
   } else if (area > 0) {
-    sourceEl.textContent = source + ' · оценка по площади'
-    status.className = 'status ok'
-    statusText.textContent = 'Используется площадь контакта пальца'
+    sourceEl.textContent = source + ' · оценка по площади'; status.className = 'status ok'; statusText.textContent = 'Используется площадь контакта пальца'
   } else if (chromeMacFallback && chromeFallbackActive) {
-    sourceEl.textContent = 'Условное нажатие · Chrome'
-    status.className = 'status warn'
-    statusText.textContent = 'Chrome: условные 50%, без реального Force Touch'
-  } else {
-    sourceEl.textContent = source
-  }
+    sourceEl.textContent = 'Условное нажатие · Chrome'; status.className = 'status warn'; statusText.textContent = 'Chrome: условные 50%, без реального Force Touch'
+  } else if (genericTouchFallbackActive) {
+    sourceEl.textContent = 'Условное касание · датчик силы недоступен'; status.className = 'status warn'; statusText.textContent = 'Касание есть, pressure не передаётся · условные 50%'
+  } else sourceEl.textContent = source
 }
 
-function getPointerPressure(e) {
-  if (typeof e.pressure === 'number') return e.pressure
-  return 0
-}
-
-function getPointerArea(e) {
-  const width = Number(e.width) || 0
-  const height = Number(e.height) || 0
-  return width > 0 && height > 0 ? Math.PI * (width / 2) * (height / 2) : 0
-}
+function getPointerPressure(e) { return typeof e.pressure === 'number' ? e.pressure : 0 }
+function getPointerArea(e) { const width = Number(e.width) || 0; const height = Number(e.height) || 0; return width > 0 && height > 0 ? Math.PI * (width / 2) * (height / 2) : 0 }
 
 function normalizeWebkitForce(e) {
   const raw = Number(e.webkitForce)
   if (!Number.isFinite(raw) || raw <= 0) return 0
-
   const normal = Number(MouseEvent.WEBKIT_FORCE_AT_MOUSE_DOWN) || 1
   const force = Number(MouseEvent.WEBKIT_FORCE_AT_FORCE_MOUSE_DOWN) || 2
-
   if (force <= normal) return clamp(raw)
   return clamp((raw - normal) / (force - normal))
 }
@@ -370,56 +205,43 @@ function handleForceTouch(e) {
 
 pad.addEventListener('pointerdown', e => {
   active = true
+  if (e.pointerType === 'touch') { activeTouchPointers.add(e.pointerId); updateFingerCount() }
   chromeFallbackActive = chromeMacFallback
-  seenValues.clear()
-  areaSamples = []
-  baselineArea = 0
-  maxObservedArea = 0
+  genericTouchFallbackActive = e.pointerType === 'touch' && getPointerPressure(e) <= 0
+  seenValues.clear(); areaSamples = []; baselineArea = 0; maxObservedArea = 0
   pad.classList.add('active')
-  if (pad.setPointerCapture) {
-    try { pad.setPointerCapture(e.pointerId) } catch {}
-  }
+  if (pad.setPointerCapture) { try { pad.setPointerCapture(e.pointerId) } catch {} }
   render(getPointerPressure(e), getPointerArea(e), 'PointerEvent')
 })
 
 pad.addEventListener('pointermove', e => {
   if (!active) return
+  if (e.pointerType === 'touch' && getPointerPressure(e) > 0) genericTouchFallbackActive = false
   const events = typeof e.getCoalescedEvents === 'function' ? e.getCoalescedEvents() : [e]
   const last = events[events.length - 1] || e
   render(getPointerPressure(last), getPointerArea(last), 'PointerEvent')
 })
 
-function endPointer() {
-  active = false
+function endPointer(e = null) {
+  if (e && e.pointerType === 'touch') { activeTouchPointers.delete(e.pointerId); updateFingerCount() }
+  active = activeTouchPointers.size > 0
   chromeFallbackActive = false
-  pad.classList.remove('active')
-  render(0, 0, meaningfulPressure ? 'Отпущено' : 'Коснитесь экрана')
+  genericTouchFallbackActive = false
+  if (!active) { pad.classList.remove('active'); render(0, 0, meaningfulPressure ? 'Отпущено' : 'Коснитесь экрана') }
 }
 
 pad.addEventListener('pointerup', endPointer)
 pad.addEventListener('pointercancel', endPointer)
-
 pad.addEventListener('webkitmouseforcechanged', handleForceTouch)
 pad.addEventListener('webkitmouseforcedown', handleForceTouch)
-pad.addEventListener('webkitmouseforceup', e => {
-  forceTouchDetected = true
-  lastForceTouch = 0
-  active = false
-  pad.classList.remove('active')
-  render(0, 0, 'Отпущено', 0)
-})
-
-pad.addEventListener('lostpointercapture', () => {
-  if (active) endPointer()
-})
+pad.addEventListener('webkitmouseforceup', e => { forceTouchDetected = true; lastForceTouch = 0; active = false; pad.classList.remove('active'); render(0, 0, 'Отпущено', 0) })
+pad.addEventListener('lostpointercapture', () => { if (active && activeTouchPointers.size === 0) endPointer() })
 
 function getTouchForce(touch) {
   if (!touch) return 0
   if (typeof touch.force === 'number') return touch.force
   if (typeof touch.webkitForce === 'number') {
-    const max = typeof touch.webkitMaximumPossibleForce === 'number' && touch.webkitMaximumPossibleForce > 0
-      ? touch.webkitMaximumPossibleForce
-      : 1
+    const max = typeof touch.webkitMaximumPossibleForce === 'number' && touch.webkitMaximumPossibleForce > 0 ? touch.webkitMaximumPossibleForce : 1
     return touch.webkitForce / max
   }
   return 0
@@ -427,78 +249,54 @@ function getTouchForce(touch) {
 
 function getTouchArea(touch) {
   if (!touch) return 0
-
   const rx = Number(touch.radiusX) || 0
   const ry = Number(touch.radiusY) || 0
-
-  if (rx > 0 && ry > 0) {
-    return Math.PI * rx * ry
-  }
-
-  return 0
+  return rx > 0 && ry > 0 ? Math.PI * rx * ry : 0
 }
 
 if (!window.PointerEvent) {
   pad.addEventListener('touchstart', e => {
     active = true
-    seenValues.clear()
-    areaSamples = []
-    baselineArea = 0
-    maxObservedArea = 0
+    updateFingerCount(e.touches.length)
+    genericTouchFallbackActive = getTouchForce(e.touches[0]) <= 0
+    seenValues.clear(); areaSamples = []; baselineArea = 0; maxObservedArea = 0
     pad.classList.add('active')
     render(getTouchForce(e.touches[0]), getTouchArea(e.touches[0]), 'Touch')
   }, {passive:false})
 
   pad.addEventListener('touchmove', e => {
     e.preventDefault()
+    updateFingerCount(e.touches.length)
+    if (getTouchForce(e.touches[0]) > 0) genericTouchFallbackActive = false
     render(getTouchForce(e.touches[0]), getTouchArea(e.touches[0]), 'Touch')
   }, {passive:false})
 
-  pad.addEventListener('touchend', endPointer)
-  pad.addEventListener('touchcancel', endPointer)
+  pad.addEventListener('touchend', e => { updateFingerCount(e.touches.length); if (e.touches.length === 0) endPointer() })
+  pad.addEventListener('touchcancel', e => { updateFingerCount(e.touches.length); if (e.touches.length === 0) endPointer() })
 }
 
 reset.addEventListener('click', () => {
   maxPressure = 0
+  maxFingerCount = activeTouchPointers.size
   maxEl.textContent = '0%'
+  maxFingerCountEl.textContent = String(maxFingerCount)
 })
 
 fullscreen.addEventListener('click', async () => {
-  try {
-    if (!document.fullscreenElement) {
-      await document.documentElement.requestFullscreen()
-    } else {
-      await document.exitFullscreen()
-    }
-  } catch {}
+  try { if (!document.fullscreenElement) await document.documentElement.requestFullscreen(); else await document.exitFullscreen() } catch {}
 })
 
 function initialSupportCheck() {
-  if (chromeMacFallback) {
-    browserNote.classList.add('show')
-  }
-
+  if (chromeMacFallback) browserNote.classList.add('show')
   const pointerSupported = 'PointerEvent' in window
   const pressureField = pointerSupported && 'pressure' in PointerEvent.prototype
-  const forceTouchSupported = typeof MouseEvent !== 'undefined' &&
-    ('WEBKIT_FORCE_AT_MOUSE_DOWN' in MouseEvent || 'onwebkitmouseforcechanged' in window)
+  const forceTouchSupported = typeof MouseEvent !== 'undefined' && ('WEBKIT_FORCE_AT_MOUSE_DOWN' in MouseEvent || 'onwebkitmouseforcechanged' in window)
 
-  if (chromeMacFallback) {
-    status.className = 'status warn'
-    statusText.textContent = 'Chrome на macOS: доступно только условное нажатие'
-  } else if (forceTouchSupported) {
-    status.className = 'status'
-    statusText.textContent = 'Force Touch API доступен — нажмите сильнее'
-  } else if (pressureField) {
-    status.className = 'status'
-    statusText.textContent = 'API давления доступен — нажмите для проверки'
-  } else if ('ontouchstart' in window) {
-    status.className = 'status warn'
-    statusText.textContent = 'Touch есть, поддержка силы не подтверждена'
-  } else {
-    status.className = 'status warn'
-    statusText.textContent = 'Датчик давления не обнаружен'
-  }
+  if (chromeMacFallback) { status.className = 'status warn'; statusText.textContent = 'Chrome на macOS: доступно только условное нажатие' }
+  else if (forceTouchSupported) { status.className = 'status'; statusText.textContent = 'Force Touch API доступен — нажмите сильнее' }
+  else if (pressureField) { status.className = 'status'; statusText.textContent = 'API давления доступен — нажмите для проверки' }
+  else if ('ontouchstart' in window) { status.className = 'status warn'; statusText.textContent = 'Touch есть, поддержка силы не подтверждена' }
+  else { status.className = 'status warn'; statusText.textContent = 'Датчик давления не обнаружен' }
 }
 
 initialSupportCheck()
